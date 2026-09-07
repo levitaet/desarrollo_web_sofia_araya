@@ -3,18 +3,83 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Informános de tu avistamiento!</title>
-    <link href="style.css" rel="stylesheet" />
+    <title>Infórmanos de tu avistamiento!</title>
+    <link href="./assets/css/styles.css" rel="stylesheet" />
 </head>
 
 <body>
     <header>
         <img src="./assets/img/ave.svg" alt="Logo de Ave" class="logo-ave">
         <h1>Infórmanos de tu avistamiento!</h1>
+        <nav>
+            <a href="index.html">Volver a la página principal 🐦</a>
+        </nav>
+
     </header>
 
-    <script src="./assets/css/styles.css">
-    </script>
+    <main>
+        <form id="form-avistamiento">
+            <div>
+                <label for="tipo-ave">Tipo de ave:</label>
+                <select id="tipo-ave" name="tipo-ave">
+                    <option value="">-- Seleccione tipo --</option>
+                </select>
+                <span class="error" id="error-tipo">Debe seleccionar un tipo de ave.</span>
+            </div>
+
+            <div>
+                <label for="subdivision-ave">Subdivisión:</label>
+                <select id="subdivision-ave" name="subdivision-ave">
+                    <option value="">-- Seleccione subdivisión --</option>
+                </select>
+                <span class="error" id="error-subdivision">Debe seleccionar una subdivisión.</span>
+            </div>
+
+            <div>
+                <label for="nombre-ave">Nombre de ave:</label>
+                <input type="text" id="nombre-ave" name="nombre-ave">
+                <span class="error" id="error-nombre">Debe ingresar el nombre del ave.</span>
+            </div>
+
+            <div>
+                <label for="region">Región:</label>
+                <select id="region" name="region">
+                    <option value="">-- Seleccione región --</option>
+                </select>
+                <span class="error" id="error-region">Debe seleccionar una región.</span>
+            </div>
+
+            <div>
+                <label for="lugar">Lugar de avistamiento:</label>
+                <input type="text" id="lugar" name="lugar">
+                <span class="error" id="error-lugar">Debe ingresar un lugar de avistamiento.</span>
+            </div>
+
+            <div>
+                <label for="fecha">Fecha de avistamiento (DD-MM-AAAA):</label>
+                <input type="text" id="fecha" name="fecha" placeholder="DD-MM-AAAA">
+                <span class="error" id="error-fecha">Fecha inválida, futura o muy antigua. Use DD-MM-AAAA.</span>
+            </div>
+
+            <div>
+                <label for="hora">Hora de avistamiento (HH:MM):</label>
+                <input type="text" id="hora" name="hora" placeholder="HH:MM">
+                <span class="error" id="error-hora">La hora debe estar en formato HH:MM.</span>
+            </div>
+
+            <div>
+                <label for="archivo">Foto o Video:</label>
+                <input type="file" id="archivo" name="archivo" accept="image/*,video/*" multiple>
+                <span class="error" id="error-archivo">Debe subir al menos una foto o video.</span>
+            </div>
+
+            <button type="button" id="btn-enviar">Enviar Avistamiento</button>
+        </form>
+    </main>
+
+    <script src="./assets/js/data/tipos-aves.js"></script>
+    <script src="./assets/js/data/region-comuna.js"></script>
+    <script src="./assets/js/controllers/avistamiento.js"></script>
 </body>
 
 </html>
