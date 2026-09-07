@@ -31,8 +31,13 @@ selectRegiones.addEventListener("change", (evento) => {
 
 // validacion formulario
 const validarForm = () => {
+
+    const mailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
     // funciones auxiliares
-    const validadorMail = (mail) => mail && mail.includes("@");
+    function validadorMail(mail) {
+        return mailRegex.test(mail)
+    }
     const validadorUserName = (username) => username && username.length > 9 && username.length < 156;
     const tieneNumeros = (str) => /\d/.test(str);
     const validadorContrasena = (pswd) => {
@@ -72,6 +77,20 @@ const validarForm = () => {
         pswdInput.style.borderColor = "";
     }
 
+    if (selectRegiones.value === "") {
+        msg += "Debes seleccionar una región\n";
+        selectRegiones.style.borderColor = "red";
+    } else {
+        selectRegiones.style.borderColor = "";
+    }
+
+    if (selectComunas.value === "") {
+        msg += "Debes seleccionar una comuna\n";
+        selectComunas.style.borderColor = "red";
+    } else {
+        selectComunas.style.borderColor = "";
+    }
+
     if (msg === "") {
         msg = "Felicidades ya tienes una cuenta!";
         isValid = true;
@@ -86,7 +105,7 @@ const validarForm = () => {
     alert(msg); // alertas JS
 
     if (isValid) {
-        window.location.href = "../html/confesiones.html";
+        window.location.href = "./listado-avistamiento.html";
     }
 };
 
