@@ -7,30 +7,38 @@
 </head>
 
 <body>
-  <div class="container">
-    <div class="logo">
-      <img id="logo-id" src="./img/ave.svg" alt="Logo de ave" />
-      <p id="bajada">Regístrate para unirte a la causa :D</p>
+  <header>
+    <div class="container">
+      <div class="logo">
+        <img id="logo-id" src="./assets/img/ave.svg" alt="Logo de ave" />
+        <h1 id="bajada">Regístrate para unirte a la causa :D</h1>
+      </div>
     </div>
+    <nav>
+      <a href="index.html">Volver a la página principal 🐦</a>
+    </nav>
+  </header>
+
+  <main>
     <form class="formulario" id="login-form">
       <div id="mail-input" class="grupo-input">
-        <label for="email">Email</label>
-        <input id="email" name="email" type="email" required>
+        <label for="email">Email <span class="asterisco-rojo">*</span></label>
+        <input id="email" name="email" type="email">
       </div>
       <div id="nombre-completo-input" class="grupo-input">
-        <label for="nombre-completo">Nombre completo</label>
-        <input id="nombre-completo" name="nombre-completo" type="text" minlength="10" maxlength="155" required>
+        <label for="nombre-completo">Nombre completo <span class="asterisco-rojo">*</span></label>
+        <input id="nombre-completo" name="nombre-completo" type="text" minlength="10" maxlength="155">
       </div>
       <div id="contrasenna-input" class="grupo-input">
-        <label for="contrasenna">Contraseña</label>
-        <input id="contrasenna" name="contrasenna" type="password" required>
+        <label for="contrasenna">Contraseña <span class="asterisco-rojo">*</span></label>
+        <input id="contrasenna" name="contrasenna" type="password">
       </div>
-      Región:
+      Región <span class="asterisco-rojo">*</span>:
       <select id="regiones">
         <option value="">-- Seleccione región --</option>
       </select>
 
-      Comuna:
+      Comuna <span class="asterisco-rojo">*</span>:
       <select id="comunas">
         <option value="">-- Seleccione comuna --</option>
       </select>
@@ -40,9 +48,10 @@
         </button>
       </div>
     </form>
-  </div>
+  </main>
   <script src="./assets/js/region-comuna.js"></script>
-  <script lang="javascript" src="./assets/js/controllers/registro.js"></script>
+  <script src="./assets/js/controllers/registro.js"></script>
+  <footer><span class="asterisco-rojo">*</span>: Este campo es obligatorio</footer>
 </body>
 
 </html>
