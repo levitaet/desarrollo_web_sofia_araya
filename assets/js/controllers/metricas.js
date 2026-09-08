@@ -31,6 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const estilosBody = getComputedStyle(document.body);
     Chart.defaults.font.family = estilosBody.fontFamily;
     Chart.defaults.font.weight = "700";
+    Chart.defaults.font.size = "20"
     Chart.defaults.color = estilosBody.color;
 
     const coloresVoluntarios = metricasVoluntarios.map(() => 'rgba(54, 162, 235, 0.6)');
