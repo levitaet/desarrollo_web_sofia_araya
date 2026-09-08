@@ -45,68 +45,64 @@ const validarForm = () => {
         return tieneNumeros(pswd) && !malas.includes(pswd);
     };
 
-    // obtener el fomulario del DOM por el ID
-    // let loginForm = document.getElementById("login-form");
-
     // obtener inputs del DOM por el ID
     let emailInput = document.getElementById("email");
     let userNameInput = document.getElementById("nombre-completo");
     let pswdInput = document.getElementById("contrasenna");
 
-    let isValid = false;
-    let msg = "";
+    const error_email = document.getElementById("error-email");
+    const error_nombre = document.getElementById("error-nombre");
+    const error_contrasenna = document.getElementById("error-contrasenna");
+    const error_region = document.getElementById("error-region");
+    const error_comuna = document.getElementById("error-comuna");
+
+    let esValido = true;
+
+    error_email.classList.remove("visible");
+    error_nombre.classList.remove("visible");
+    error_contrasenna.classList.remove("visible");
+    error_region.classList.remove("visible");
+    error_comuna.classList.remove("visible");
 
     if (!validadorMail(emailInput.value)) {
-        msg += "Mail inválido\n";
-        emailInput.style.borderColor = "red"; // cambiar estilo con JS!!
-    } else {
-        emailInput.style.borderColor = "";
+        error_email.classList.add("visible");
+        esValido = false;
     }
 
     if (!validadorUserName(userNameInput.value)) {
-        msg += "Nombre inválido\n";
-        userNameInput.style.borderColor = "red";
-    } else {
-        userNameInput.style.borderColor = "";
+        error_nombre.classList.add("visible");
+        esValido = false;
     }
 
     if (!validadorContrasena(pswdInput.value)) {
-        msg += "Contraseña inválida\n";
-        pswdInput.style.borderColor = "red";
-    } else {
-        pswdInput.style.borderColor = "";
+        error_contrasenna.classList.add("visible");
+        esValido = false;
     }
 
     if (selectRegiones.value === "") {
-        msg += "Debes seleccionar una región\n";
-        selectRegiones.style.borderColor = "red";
-    } else {
-        selectRegiones.style.borderColor = "";
+        error_region.classList.add("visible");
+        esValido = false;
     }
 
     if (selectComunas.value === "") {
-        msg += "Debes seleccionar una comuna\n";
-        selectComunas.style.borderColor = "red";
-    } else {
-        selectComunas.style.borderColor = "";
+        error_comuna.classList.add("visible");
+        esValido = false;
     }
 
-    if (msg === "") {
-        msg = "Felicidades ya tienes una cuenta!";
-        isValid = true;
-        // loginForm.submit();
-
-        // no contamos con un backend, asi que de momento
-        // utilizaremos el localStorage para dar la
-        // sensacion de que nos hemos autentificado.
-        let username = userNameInput.value;
-        localStorage.setItem("username", username);
+    if (esValido === false) {
+        return;
     }
-    alert(msg); // alertas JS
 
-    if (isValid) {
-        window.location.href = "./listado-avistamiento.html";
-    }
+    alert("Felicidades ya tienes una cuenta!");
+    // loginForm.submit();
+
+    // no contamos con un backend, asi que de momento
+    // utilizaremos el localStorage para dar la
+    // sensacion de que nos hemos autentificado.
+    let username = userNameInput.value;
+    localStorage.setItem("username", username);
+
+    window.location.href = "./listado-avistamiento.html";
 };
 
 // recuperamos el boton que envia el form
