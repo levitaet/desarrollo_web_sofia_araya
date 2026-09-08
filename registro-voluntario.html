@@ -2,6 +2,7 @@
 <html lang="es">
 
 <head>
+  <meta charset="utf-8">
   <title>Registro de voluntarios</title>
   <link rel="stylesheet" type="text/css" href="../css/registro.css">
 </head>
@@ -10,7 +11,7 @@
   <header>
     <div class="container">
       <div class="logo">
-        <img id="logo-id" src="./assets/img/ave.svg" alt="Logo de ave" />
+        <img id="logo-id" src="./assets/img/ave.svg" alt="Logo de ave">
         <h1 id="bajada">Regístrate para unirte a la causa :D</h1>
       </div>
     </div>
@@ -24,24 +25,29 @@
       <div id="mail-input" class="grupo-input">
         <label for="email">Email <span class="asterisco-rojo">*</span></label>
         <input id="email" name="email" type="email">
+        <span class="error" id="error-email">Email inválido.</span>
       </div>
       <div id="nombre-completo-input" class="grupo-input">
         <label for="nombre-completo">Nombre completo <span class="asterisco-rojo">*</span></label>
         <input id="nombre-completo" name="nombre-completo" type="text" minlength="10" maxlength="155">
+        <span class="error" id="error-nombre">Nombre inválido (entre 10 y 155 caracteres).</span>
       </div>
       <div id="contrasenna-input" class="grupo-input">
         <label for="contrasenna">Contraseña <span class="asterisco-rojo">*</span></label>
         <input id="contrasenna" name="contrasenna" type="password">
+        <span class="error" id="error-contrasenna">Contraseña inválida (debe contener números y no ser "1234").</span>
       </div>
       Región <span class="asterisco-rojo">*</span>:
       <select id="regiones">
         <option value="">-- Seleccione región --</option>
       </select>
+      <span class="error" id="error-region">Debes seleccionar una región.</span><br><br>
 
       Comuna <span class="asterisco-rojo">*</span>:
       <select id="comunas">
         <option value="">-- Seleccione comuna --</option>
       </select>
+      <span class="error" id="error-comuna">Debes seleccionar una comuna.</span><br><br>
       <div class="botones">
         <button type="button" id="envio">
           Regístrate como voluntario
