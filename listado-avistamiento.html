@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <title>Listado de Avistamientos</title>
+    <link href="./assets/css/styles.css" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <img src="./assets/img/ave.svg" alt="Logo de Ave" class="logo-ave">
+        <h1>Listado de Avistamientos</h1>
+        <nav>
+            <a href="index.html">Volver a la página principal 🐦</a>
+        </nav>
+    </header>
+    <main>
+        <section id="filtros">
+            <h2>Filtros y Orden</h2>
+            <div style="margin-bottom: 10px;">
+                <label for="filtro-tipo">Tipo de ave:</label>
+                <select id="filtro-tipo">
+                    <option value="">Todos</option>
+                </select>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <label for="ordenar-por">Ordenar por:</label>
+                <select id="ordenar-por">
+                    <option value="fecha-desc">Fecha (más reciente primero)</option>
+                    <option value="fecha-asc">Fecha (más antigua primero)</option>
+                    <option value="lugar-asc">Lugar (A-Z)</option>
+                </select>
+            </div>
+        </section>
+
+        <div id="resultados">
+            <table id="tabla-avistamientos" style="width: 100%; text-align: left; border-collapse: collapse;">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                        <th>Lugar</th>
+                        <th>Región</th>
+                        <th>Tipo</th>
+                        <th>Subdivisión</th>
+                        <th>Nombre</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="paginacion" style="margin-top: 20px; text-align: center;">
+            <button type="button" id="btn-anterior">Anterior</button>
+            <span id="info-pagina" style="margin: 0 10px;">Página 1</span>
+            <button type="button" id="btn-siguiente">Siguiente</button>
+        </div>
+    </main>
+    <!-- datos para filtros y tablita -->
+    <script src="./assets/js/data/tipos-aves.js"></script>
+    <script src="./assets/js/data/avistamientos.js"></script>
+
+    <script src="./assets/js/controllers/listado.js"></script>
+</body>
+
+</html>
