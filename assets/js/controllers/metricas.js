@@ -28,6 +28,10 @@ const dibujarGrafico = (datos, canvasId, tipo, titulo, colores) => {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
+    const estilosBody = getComputedStyle(document.body);
+    Chart.defaults.font.family = estilosBody.fontFamily;
+    Chart.defaults.font.weight = "700";
+    Chart.defaults.color = estilosBody.color;
 
     const coloresVoluntarios = metricasVoluntarios.map(() => 'rgba(54, 162, 235, 0.6)');
     dibujarGrafico(metricasVoluntarios, "grafico-voluntarios", "bar", "Voluntarios Registrados", coloresVoluntarios);

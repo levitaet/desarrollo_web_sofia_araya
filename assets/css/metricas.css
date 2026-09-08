@@ -1,0 +1,19 @@
+main {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 30px;
+    align-items: start;
+    padding: 0 30px;
+}
+
+.contenedor-grafico {
+    padding: 20px;
+    border-radius: 15px;
+    background-color: rgba(64, 81, 59, 0.7);
+}
+
+@media (max-width: 700px) {
+    main {
+        grid-template-columns: 1fr;
+    }
+}

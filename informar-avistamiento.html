@@ -5,20 +5,22 @@
     <meta charset="utf-8">
     <title>Infórmanos de tu avistamiento!</title>
     <link href="./assets/css/styles.css" rel="stylesheet">
+    <link href="./assets/css/formularios.css" rel="stylesheet">
 </head>
 
 <body>
     <header>
         <img src="./assets/img/ave.svg" alt="Logo de Ave" class="logo-ave">
+        <link href="./assets/css/styles.css" rel="stylesheet">
         <h1>Infórmanos de tu avistamiento!</h1>
         <nav>
-            <a href="index.html">Volver a la página principal 🐦</a>
+            <a id="volver-inicio-avistamiento" class="boton-volver" href="index.html">Volver a la página principal 🐦</a>
         </nav>
 
     </header>
 
     <main>
-        <form id="form-avistamiento">
+        <form class="formulario" id="form-avistamiento">
             <div>
                 <label for="tipo-ave">Tipo de ave:</label>
                 <select id="tipo-ave" name="tipo-ave">
@@ -73,7 +75,9 @@
                 <span class="error" id="error-archivo">Debe subir al menos una foto o video.</span>
             </div>
 
-            <button type="button" id="btn-enviar">Enviar Avistamiento</button>
+            <div class="botones">
+                <button type="button" id="btn-enviar">Enviar Avistamiento</button>
+            </div>
         </form>
     </main>
 

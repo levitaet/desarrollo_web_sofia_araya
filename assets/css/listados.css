@@ -1,0 +1,28 @@
+#tabla-y-paginas {
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 15px;
+  box-sizing: border-box;
+  margin: auto;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+#resultados {
+  width: 100%;
+}
+
+#tabla-avistamientos {
+  border: 1px solid white;
+}
+
+#tabla-avistamientos th,
+#tabla-avistamientos td {
+  padding: 8px;
+  border: 1px solid white;
+}
+
+#filtros {
+  display: column;
+  text-align: center;
+}
