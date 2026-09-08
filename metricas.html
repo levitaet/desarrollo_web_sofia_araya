@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <title>Estadísticas para nerds</title>
+    <link href="./assets/css/styles.css" rel="stylesheet">
+    <!-- Carga de Chart.js mediante CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <header>
+        <img src="./assets/img/ave.svg" alt="Logo de Ave" class="logo-ave">
+        <h1>Estadísticas para nerds</h1>
+        <nav>
+            <a href="index.html">Volver a la página principal 🐦</a>
+        </nav>
+    </header>
+    <main>
+        <section>
+            <h2>Voluntarios Registrados por Región</h2>
+            <div class="contenedor-grafico">
+                <canvas id="grafico-voluntarios"></canvas>
+            </div>
+        </section>
+
+        <section>
+            <h2>Avistamientos por Tipo de Ave</h2>
+            <div class="contenedor-grafico">
+                <canvas id="grafico-avistamientos"></canvas>
+            </div>
+        </section>
+    </main>
+
+    <!-- Data JS -->
+    <script src="./assets/js/data/metricas-data.js"></script>
+    <!-- Controller JS -->
+    <script src="./assets/js/controllers/metricas.js"></script>
+</body>
+
+</html>
