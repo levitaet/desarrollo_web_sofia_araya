@@ -5,7 +5,7 @@
   border-radius: 15px;
   box-sizing: border-box;
   margin: auto;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.8);
 }
 
 #resultados {
@@ -20,6 +20,11 @@
 #tabla-avistamientos td {
   padding: 8px;
   border: 1px solid white;
+}
+
+.enlace-ave {
+  color: inherit;
+  font-weight: bold;
 }
 
 #filtros {

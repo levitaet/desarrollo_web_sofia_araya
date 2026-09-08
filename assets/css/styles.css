@@ -99,3 +99,20 @@ footer {
 .formulario button {
   font-family: inherit;
 }
+
+.vista-imagen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  padding: 30px;
+  box-sizing: border-box;
+}
+
+.vista-imagen img {
+  display: block;
+  max-width: 100%;
+  max-height: 90vh;
+  border-radius: 15px;
+}

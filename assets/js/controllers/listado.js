@@ -46,13 +46,13 @@ const renderizarTabla = () => {
         paginados.forEach(item => {
             const tr = document.createElement("tr");
             tr.innerHTML = `
-                <td>${item.fecha}</td>
-                <td>${item.hora}</td>
-                <td>${item.lugar}</td>
-                <td>${item.region}</td>
+                <td><a class="enlace-ave" href="ver-imagen.html?ave=${encodeURIComponent(item.nombre)}">${item.nombre}</a></td>
                 <td>${item.tipo}</td>
                 <td>${item.subdivision || "-"}</td>
-                <td>${item.nombre}</td>
+                <td>${item.lugar}</td>
+                <td>${item.region}</td>
+                <td>${item.fecha}</td>
+                <td>${item.hora}</td>
             `;
             tbody.appendChild(tr);
         });
