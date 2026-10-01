@@ -22,7 +22,7 @@
     <main>
         <form class="formulario" id="form-avistamiento">
             <div>
-                <label for="tipo-ave">Tipo de ave:</label>
+                <label for="tipo-ave">Tipo de ave <span class="asterisco-rojo">*</span>:</label>
                 <select id="tipo-ave" name="tipo-ave">
                     <option value="">-- Seleccione tipo --</option>
                 </select>
@@ -30,7 +30,7 @@
             </div>
 
             <div>
-                <label for="subdivision-ave">Subdivisión:</label>
+                <label for="subdivision-ave">Subdivisión <span class="asterisco-rojo">*</span>:</label>
                 <select id="subdivision-ave" name="subdivision-ave">
                     <option value="">-- Seleccione subdivisión --</option>
                 </select>
@@ -38,13 +38,13 @@
             </div>
 
             <div>
-                <label for="nombre-ave">Nombre de ave:</label>
+                <label for="nombre-ave">Nombre de ave <span class="asterisco-rojo">*</span>:</label>
                 <input type="text" id="nombre-ave" name="nombre-ave">
                 <span class="error" id="error-nombre">Debe ingresar el nombre del ave.</span>
             </div>
 
             <div>
-                <label for="region">Región:</label>
+                <label for="region">Región <span class="asterisco-rojo">*</span>:</label>
                 <select id="region" name="region">
                     <option value="">-- Seleccione región --</option>
                 </select>
@@ -52,25 +52,25 @@
             </div>
 
             <div>
-                <label for="lugar">Lugar de avistamiento:</label>
+                <label for="lugar">Lugar de avistamiento <span class="asterisco-rojo">*</span>:</label>
                 <input type="text" id="lugar" name="lugar">
                 <span class="error" id="error-lugar">Debe ingresar un lugar de avistamiento.</span>
             </div>
 
             <div>
-                <label for="fecha">Fecha de avistamiento (DD-MM-AAAA):</label>
+                <label for="fecha">Fecha de avistamiento (DD-MM-AAAA) <span class="asterisco-rojo">*</span>:</label>
                 <input type="text" id="fecha" name="fecha" placeholder="DD-MM-AAAA">
                 <span class="error" id="error-fecha">Fecha inválida, futura o muy antigua. Use DD-MM-AAAA.</span>
             </div>
 
             <div>
-                <label for="hora">Hora de avistamiento (HH:MM):</label>
+                <label for="hora">Hora de avistamiento (HH:MM) <span class="asterisco-rojo">*</span>:</label>
                 <input type="text" id="hora" name="hora" placeholder="HH:MM">
                 <span class="error" id="error-hora">La hora debe estar en formato HH:MM.</span>
             </div>
 
             <div>
-                <label for="archivo">Foto o Video:</label>
+                <label for="archivo">Foto o Video <span class="asterisco-rojo">*</span>:</label>
                 <input type="file" id="archivo" name="archivo" accept="image/*,video/*" multiple>
                 <span class="error" id="error-archivo">Debe subir al menos una foto o video.</span>
             </div>
@@ -84,6 +84,7 @@
     <script src="./assets/js/data/tipos-aves.js"></script>
     <script src="./assets/js/data/region-comuna.js"></script>
     <script src="./assets/js/controllers/avistamiento.js"></script>
+    <footer><span class="asterisco-rojo">*</span>: Este campo es obligatorio</footer>
 </body>
 
 </html>
