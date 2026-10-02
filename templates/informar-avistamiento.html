@@ -1,26 +1,16 @@
-<!DOCTYPE html>
-<html lang="es">
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="utf-8">
-    <title>Infórmanos de tu avistamiento!</title>
-    <link href="../static/css/styles.css" rel="stylesheet">
-    <link href="../static/css/formularios.css" rel="stylesheet">
-</head>
+{% block title %}Infórmanos de tu avistamiento! - Avistamientos de Aves 🐦{% endblock %}
 
-<body>
-    <header>
-        <img src="../static/uploads/ave.svg" alt="Logo de Ave" class="logo-ave">
-        <link href="../static/css/styles.css" rel="stylesheet">
-        <h1>Infórmanos de tu avistamiento!</h1>
-        <nav>
-            <a id="volver-inicio-avistamiento" class="boton-volver" href="index.html">Volver a la página principal
-                🐦</a>
-        </nav>
+{% block css %}
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/formularios.css') }}">
+{% endblock %}
 
-    </header>
+{% block header_title %}
+  <h2>Infórmanos de tu avistamiento!</h2>
+{% endblock %}
 
-    <main>
+{% block content %}
         <form class="formulario" id="form-avistamiento">
             <div>
                 <label for="tipo-ave">Tipo de ave <span class="asterisco-rojo">*</span>:</label>
@@ -80,12 +70,14 @@
                 <button type="button" id="btn-enviar">Enviar Avistamiento</button>
             </div>
         </form>
-    </main>
+{% endblock %}
 
-    <script src="../static/js/data/tipos-aves.js"></script>
-    <script src="../static/js/data/region-comuna.js"></script>
-    <script src="../static/js/controllers/avistamiento.js"></script>
-    <footer><span class="asterisco-rojo">*</span>: Este campo es obligatorio</footer>
-</body>
+{% block javascript %}
+    <script src="{{ url_for('static', filename='js/data/tipos-aves.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/data/region-comuna.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/controllers/avistamiento.js') }}"></script>
+{% endblock %}
 
-</html>
+{% block footer_content %}
+    <span class="asterisco-rojo">*</span>: Este campo es obligatorio
+{% endblock %}

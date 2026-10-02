@@ -1,25 +1,10 @@
-<!DOCTYPE html>
-<html lang="es">
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="utf-8">
-    <title>Avistamientos de Aves 🐦</title>
-    <link href="../static/css/styles.css" rel="stylesheet">
-</head>
+{% block title %}Inicio - Avistamientos de Aves 🐦{% endblock %}
 
-<body>
-    <header>
-        <img src="../static/uploads/ave.svg" alt="Logo de Ave" class="logo-ave">
-    </header>
-    <h1>Unión de Ornitólogos de Chile</h1>
-    <h2>Avistamientos de Aves</h2>
-    <nav class="menu-botones">
-        <a href="registro-voluntario.html" class="boton-enlace">Únete a la causa</a>
-        <a href="informar-avistamiento.html" class="boton-enlace">Reporta un avistamiento</a>
-        <a href="listado-avistamiento.html" class="boton-enlace">Revisa los avistamientos recientes</a>
-        <a href="metricas.html" class="boton-enlace">Estadísticas para nerds</a>
-    </nav>
-    <footer>🐦</footer>
-</body>
+{% block header_title %}
+<h2>Avistamientos de Aves</h2>
+{% endblock %}
 
-</html>
+{% block content %}
+{% endblock %}

@@ -1,23 +1,17 @@
-<!DOCTYPE html>
-<html lang="es">
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="utf-8">
-    <title>Estadísticas para nerds</title>
-    <link href="../static/css/styles.css" rel="stylesheet">
-    <link href="../static/css/metricas.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
+{% block title %}Estadísticas para nerds - Avistamientos de Aves 🐦{% endblock %}
 
-<body>
-    <header>
-        <img src="../static/uploads/ave.svg" alt="Logo de Ave" class="logo-ave">
-        <h1>Estadísticas para nerds</h1>
-        <nav>
-            <a id="volver-inicio-metricas" class="boton-volver" href="index.html">Volver a la página principal 🐦</a>
-        </nav>
-    </header>
-    <main>
+{% block css %}
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/metricas.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block header_title %}
+    <h2>Estadísticas para nerds</h2>
+{% endblock %}
+
+{% block content %}
         <section>
             <h2>Voluntarios Registrados por Región</h2>
             <div class="contenedor-grafico">
@@ -31,12 +25,9 @@
                 <canvas id="grafico-avistamientos"></canvas>
             </div>
         </section>
-    </main>
+{% endblock %}
 
-    <!-- Data JS -->
-    <script src="../static/js/data/metricas-data.js"></script>
-    <!-- Controller JS -->
-    <script src="../static/js/controllers/metricas.js"></script>
-</body>
-
-</html>
+{% block javascript %}
+    <script src="{{ url_for('static', filename='js/data/metricas-data.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/controllers/metricas.js') }}"></script>
+{% endblock %}

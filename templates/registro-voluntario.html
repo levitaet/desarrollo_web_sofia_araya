@@ -1,66 +1,60 @@
-<!DOCTYPE html>
-<html lang="es">
+{% extends 'base.html' %}
 
-<head>
-  <meta charset="utf-8">
-  <title>Registro de voluntarios</title>
-  <link href="../static/css/styles.css" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="../static/css/formularios.css">
-</head>
+{% block title %}Registro de voluntarios - Avistamientos de Aves 🐦{% endblock %}
 
-<body>
-  <header>
-    <div class="container">
-      <img src="../static/uploads/ave.svg" alt="Logo de Ave" class="logo-ave">
-      <h1 id="bajada">Regístrate para unirte a la causa :D</h1>
-    </div>
-    <nav>
-      <a id="volver-inicio-registro" class="boton-volver" href="index.html">Volver a la página principal 🐦</a>
-    </nav>
-  </header>
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/formularios.css') }}">
+{% endblock %}
 
-  <main>
-    <form class="formulario" id="login-form">
-      <div id="mail-input" class="grupo-input">
-        <label for="email">Email <span class="asterisco-rojo">*</span>:</label>
-        <input id="email" name="email" type="email">
-        <span class="error" id="error-email">Email inválido.</span>
-      </div>
-      <div id="nombre-completo-input" class="grupo-input">
-        <label for="nombre-completo">Nombre completo <span class="asterisco-rojo">*</span>:</label>
-        <input id="nombre-completo" name="nombre-completo" type="text" minlength="10" maxlength="155">
-        <span class="error" id="error-nombre">Nombre inválido (entre 10 y 155 caracteres).</span>
-      </div>
-      <div id="contrasenna-input" class="grupo-input">
-        <label for="contrasenna">Contraseña <span class="asterisco-rojo">*</span>:</label>
-        <input id="contrasenna" name="contrasenna" type="password">
-        <span class="error" id="error-contrasenna">Contraseña inválida (debe contener números y no ser "1234").</span>
-      </div>
-      <div id="region-input" class="grupo-input">
-        <label for="regiones">Región <span class="asterisco-rojo">*</span>:</label>
-        <select id="regiones" name="regiones">
-          <option value="">-- Seleccione región --</option>
-        </select>
-        <span class="error" id="error-region">Debes seleccionar una región.</span>
-      </div>
+{% block header_title %}
+<h2 id="bajada">Regístrate para unirte a la causa :D</h2>
+{% endblock %}
 
-      <div id="comuna-input" class="grupo-input">
-        <label for="comunas">Comuna <span class="asterisco-rojo">*</span>:</label>
-        <select id="comunas" name="comunas">
-          <option value="">-- Seleccione comuna --</option>
-        </select>
-        <span class="error" id="error-comuna">Debes seleccionar una comuna.</span>
-      </div>
-      <div class="botones">
-        <button type="button" id="envio">
-          Regístrate como voluntario
-        </button>
-      </div>
-    </form>
-  </main>
-  <script src="../static/js/data/region-comuna.js"></script>
-  <script src="../static/js/controllers/registro.js"></script>
-  <footer><span class="asterisco-rojo">*</span>: Este campo es obligatorio</footer>
-</body>
+{% block content %}
+<form class="formulario" id="login-form">
+  <div id="mail-input" class="grupo-input">
+    <label for="email">Email <span class="asterisco-rojo">*</span>:</label>
+    <input id="email" name="email" type="email">
+    <span class="error" id="error-email">Email inválido.</span>
+  </div>
+  <div id="nombre-completo-input" class="grupo-input">
+    <label for="nombre-completo">Nombre completo <span class="asterisco-rojo">*</span>:</label>
+    <input id="nombre-completo" name="nombre-completo" type="text" minlength="10" maxlength="155">
+    <span class="error" id="error-nombre">Nombre inválido (entre 10 y 155 caracteres).</span>
+  </div>
+  <div id="contrasenna-input" class="grupo-input">
+    <label for="contrasenna">Contraseña <span class="asterisco-rojo">*</span>:</label>
+    <input id="contrasenna" name="contrasenna" type="password">
+    <span class="error" id="error-contrasenna">Contraseña inválida (debe contener números y no ser "1234").</span>
+  </div>
+  <div id="region-input" class="grupo-input">
+    <label for="regiones">Región <span class="asterisco-rojo">*</span>:</label>
+    <select id="regiones" name="regiones">
+      <option value="">-- Seleccione región --</option>
+    </select>
+    <span class="error" id="error-region">Debes seleccionar una región.</span>
+  </div>
 
-</html>
+  <div id="comuna-input" class="grupo-input">
+    <label for="comunas">Comuna <span class="asterisco-rojo">*</span>:</label>
+    <select id="comunas" name="comunas">
+      <option value="">-- Seleccione comuna --</option>
+    </select>
+    <span class="error" id="error-comuna">Debes seleccionar una comuna.</span>
+  </div>
+  <div class="botones">
+    <button type="button" id="envio">
+      Regístrate como voluntario
+    </button>
+  </div>
+</form>
+{% endblock %}
+
+{% block javascript %}
+<script src="{{ url_for('static', filename='js/data/region-comuna.js') }}"></script>
+<script src="{{ url_for('static', filename='js/controllers/registro.js') }}"></script>
+{% endblock %}
+
+{% block footer_content %}
+<span class="asterisco-rojo">*</span>: Este campo es obligatorio
+{% endblock %}
