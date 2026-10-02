@@ -2,7 +2,7 @@
 
 body::before {
   content: "";
-  background-image: url('../img/bg.jpg');
+  background-image: url('../uploads/bg.jpg');
   background-size: cover;
   background-position: center;
   position: fixed;
