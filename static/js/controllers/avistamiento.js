@@ -38,12 +38,12 @@ selectTipoAve.addEventListener("change", (e) => {
 
 selectSubdivision.disabled = true;
 
-const validarFormAvistamiento = () => {
+const validarFormAvistamiento = (e) => {
     let nombreAveInput = document.getElementById("nombre-ave");
     let lugarInput = document.getElementById("lugar");
     let fechaInput = document.getElementById("fecha");
     let horaInput = document.getElementById("hora");
-    let archivoInput = document.getElementById("archivo");
+    let archivoInput = document.getElementById("archivos");
 
     const error_tipo = document.getElementById("error-tipo");
     const error_subdivision = document.getElementById("error-subdivision");
@@ -131,13 +131,14 @@ const validarFormAvistamiento = () => {
         esValido = false;
     }
 
-    if (esValido === false) {
+    if (!esValido) {
+        e.preventDefault();
         return;
     }
 
-    alert("Avistamiento informado correctamente!");
-    document.getElementById("form-avistamiento").reset();
 };
 
 const btnEnviar = document.getElementById("btn-enviar");
-btnEnviar.addEventListener("click", validarFormAvistamiento);
+btnEnviar.addEventListener("click", (e) => {
+    validarFormAvistamiento(e);
+});

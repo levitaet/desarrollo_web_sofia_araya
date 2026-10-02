@@ -89,22 +89,18 @@ const validarForm = () => {
         esValido = false;
     }
 
-    if (esValido === false) {
-        return;
+    if (!esValido) {
+        return false;
     }
 
-    alert("Felicidades ya tienes una cuenta!");
-    // loginForm.submit();
+    return true;
 
-    // no contamos con un backend, asi que de momento
-    // utilizaremos el localStorage para dar la
-    // sensacion de que nos hemos autentificado.
-    let username = userNameInput.value;
-    localStorage.setItem("username", username);
-
-    window.location.href = "./listado-avistamiento.html";
 };
 
-// recuperamos el boton que envia el form
 let submitBtn = document.getElementById("envio");
-submitBtn.addEventListener("click", validarForm);
+submitBtn.addEventListener("click", (e) => {
+    const valido = validarForm();
+    if (!valido) {
+        e.preventDefault();
+    }
+})
