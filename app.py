@@ -27,9 +27,9 @@ def index():
         .order_by(Avistamiento.id.desc())
         .limit(2)
         .all())
+        return render_template('index.html', avistamientos=ultimos)
     finally:
         db.close()
-    return render_template('index.html', avistamientos=ultimos)
 
 
 @app.route('/registro-voluntario', methods=["GET","POST"])
@@ -45,15 +45,17 @@ def registro_voluntario():
             errores={}, valores={})
         
         # metodo POST
-        email = request.form.get("email", "").strip()
-        nombre_completo = request.form.get("nombre-completo", "").strip()
+        email      = request.form.get("email", "").strip()
+        nombre     = request.form.get("nombre", "").strip()
         contrasenna = request.form.get("contrasenna", "").strip()
-        comuna_id = request.form.get("comunas", "").strip()
+        telefono   = request.form.get("telefono", "").strip()
+        comuna_id  = request.form.get("comunas", "").strip()
 
         valores = {
-            "email": email,
-            "nombre_completo": nombre_completo,
-            "comuna_id": comuna_id,
+            "email":       email,
+            "nombre":      nombre,
+            "telefono":    telefono,
+            "comuna_id":   comuna_id,
         }
 
         #validaciones
@@ -61,13 +63,17 @@ def registro_voluntario():
         mail_regex = r'^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$'
 
         if not re.match(mail_regex, email):
-            errores["email"] = "Email inválido"
+            errores["email"] = "Email inválido."
 
-        if not nombre_completo or len(nombre_completo) < 10 or len(nombre_completo) > 155:
-            errores["nombre"] = "Nombre inválido (entre 10 y 155 caracteres)."
-        
+        if not nombre or len(nombre) < 10 or len(nombre) > 255:
+            errores["nombre"] = "Nombre inválido (entre 10 y 255 caracteres)."
+
         if not contrasenna or not re.search(r'\d', contrasenna) or contrasenna == "1234":
-            errores["contrasenna"] = "Contraseña inválida (debe contener números y no ser '1234')"
+            errores["contrasenna"] = "Contraseña inválida (debe contener números y no ser '1234')."
+
+        telefono_regex = r'^\+?[0-9\s\-]{7,15}$'
+        if not telefono or not re.match(telefono_regex, telefono):
+            errores["telefono"] = "Teléfono inválido (solo números, entre 7 y 15 dígitos)."
         
         if not comuna_id:
             errores["comuna"] = "Debes seleccionar una comuna"
@@ -89,11 +95,12 @@ def registro_voluntario():
 
         #insertar
         nuevo = Voluntario(
-            nombre_completo=nombre_completo,
+            nombre=nombre,
             email=email,
             contrasenna=contrasenna,
+            telefono=telefono,
             comuna_id=int(comuna_id),
-            fecha_registro = datetime.now()
+            fecha_registro=datetime.now(),
         )
 
         db.add(nuevo)
@@ -112,7 +119,7 @@ def registro_voluntario():
 def informar_avistamiento():
     db = get_db()
     try:
-        voluntarios = db.query(Voluntario).order_by(Voluntario.nombre_completo).all()
+        voluntarios = db.query(Voluntario).order_by(Voluntario.nombre).all()
         aves = db.query(Ave).order_by(Ave.nombre).all()
         regiones = db.query(Region).order_by(Region.nombre).all()
 
@@ -129,18 +136,20 @@ def informar_avistamiento():
         
         #POST
         voluntario_id = request.form.get("voluntario_id", "").strip()
-        ave_id = request.form.get("ave_id", "").strip()
-        lugar = request.form.get("lugar", "").strip()
-        fecha = request.form.get("fecha", "").strip()
-        hora = request.form.get("hora", "").strip()
-        archivos = request.files.getlist("archivos")
+        ave_id        = request.form.get("ave_id", "").strip()
+        lugar         = request.form.get("lugar", "").strip()
+        fecha         = request.form.get("fecha", "").strip()   # DD-MM-AAAA
+        hora          = request.form.get("hora", "").strip()    # HH:MM
+        descripcion   = request.form.get("descripcion", "").strip()
+        archivos      = request.files.getlist("archivos")
 
         valores = {
             "voluntario_id": voluntario_id,
-            "ave_id": ave_id,
-            "lugar": lugar,
-            "fecha": fecha,
-            "hora": hora,
+            "ave_id":        ave_id,
+            "lugar":         lugar,
+            "fecha":         fecha,
+            "hora":          hora,
+            "descripcion":   descripcion,
         }
 
         #validaci'on
@@ -156,6 +165,7 @@ def informar_avistamiento():
         if not lugar:
             errores["lugar"] = "Debes ingresar el lugar de avistamiento."
 
+        fecha_hora_dt = None
         fecha_regex = r'^\d{2}-\d{2}-\d{4}$'
         if not re.match(fecha_regex, fecha):
             errores["fecha"] = "Fecha inválida. Usar DD-MM-AAAA."
@@ -167,8 +177,13 @@ def informar_avistamiento():
             except ValueError:
                 errores["fecha"] = "Fecha inválida."
 
-        if not re.match(r'^([01]\d|2[0-3]):([0-5]\d)$', hora):
+        hora_regex = r'^([01]\d|2[0-3]):([0-5]\d)$'
+        if not re.match(hora_regex, hora):
             errores["hora"] = "Hora inválida. Use HH:MM."
+
+        if "fecha" not in errores and "hora" not in errores:
+            fecha_hora_dt = datetime.strptime(f"{fecha} {hora}", "%d-%m-%Y %H:%M")
+
 
         archivos_validos = [f for f in archivos
                             if f and f.filename and allowed_file(f.filename)]
@@ -187,9 +202,9 @@ def informar_avistamiento():
             errores=errores, valores=valores)
 
         nuevo_av = Avistamiento(
-            fecha=fecha,
-            hora=hora,
+            fecha_hora=fecha_hora_dt,
             lugar=lugar,
+            descripcion=descripcion if descripcion else None,
             ave_id=int(ave_id),
             voluntario_id=int(voluntario_id),
         )
@@ -230,12 +245,12 @@ def listado_avistamiento():
                          .limit(per_page)
                          .all())
         total_pages = max(1, (total + per_page - 1) // per_page)
+        return render_template("listado-avistamiento.html",
+                               avistamientos=avistamientos,
+                               page=page,
+                               total_pages=total_pages)
     finally:
         db.close()
-    return render_template("listado-avistamiento.html",
-                           avistamientos=avistamientos,
-                           page=page,
-                           total_pages=total_pages)
 
 #detalle
 @app.route("/avistamiento/<int:id>")
@@ -245,9 +260,9 @@ def detalle_avistamiento(id):
         avistamiento = db.query(Avistamiento).filter(Avistamiento.id == id).first()
         if not avistamiento:
             abort(404)
+        return render_template("detalle-avistamiento.html", avistamiento=avistamiento)
     finally:
         db.close()
-    return render_template("detalle-avistamiento.html", avistamiento=avistamiento)
 
 @app.route('/metricas')
 def metricas():
