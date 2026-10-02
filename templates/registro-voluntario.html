@@ -26,16 +26,22 @@
     <input id="email" name="email" type="email" value="{{ valores.get('email', '') }}">
     <span class="error" id="error-email">Email inválido.</span>
   </div>
-  <div id="nombre-completo-input" class="grupo-input">
-    <label for="nombre-completo">Nombre completo <span class="asterisco-rojo">*</span>:</label>
-    <input id="nombre-completo" name="nombre-completo" type="text" minlength="10" maxlength="155"
-      value="{{ valores.get('nombre_completo', '') }}">
-    <span class="error" id="error-nombre">Nombre inválido (entre 10 y 155 caracteres).</span>
+  <div id="nombre-input" class="grupo-input">
+    <label for="nombre">Nombre completo <span class="asterisco-rojo">*</span>:</label>
+    <input id="nombre" name="nombre" type="text" minlength="10" maxlength="255"
+      value="{{ valores.get('nombre', '') }}">
+    <span class="error" id="error-nombre">Nombre inválido (entre 10 y 255 caracteres).</span>
   </div>
   <div id="contrasenna-input" class="grupo-input">
     <label for="contrasenna">Contraseña <span class="asterisco-rojo">*</span>:</label>
     <input id="contrasenna" name="contrasenna" type="password">
     <span class="error" id="error-contrasenna">Contraseña inválida (debe contener números y no ser "1234").</span>
+  </div>
+  <div id="telefono-input" class="grupo-input">
+    <label for="telefono">Teléfono <span class="asterisco-rojo">*</span>:</label>
+    <input id="telefono" name="telefono" type="tel" maxlength="15"
+      value="{{ valores.get('telefono', '') }}">
+    <span class="error" id="error-telefono">Teléfono inválido (solo números, 7-15 dígitos).</span>
   </div>
   <div id="region-input" class="grupo-input">
     <label for="regiones">Región <span class="asterisco-rojo">*</span>:</label>
@@ -69,8 +75,6 @@
 {% endblock %}
 
 {% block javascript %}
-<script src="{{ url_for('static', filename='js/data/region-comuna.js') }}"></script>
-<script src="{{ url_for('static', filename='js/controllers/registro.js') }}"></script>
 {% endblock %}
 
 {% block footer_content %}

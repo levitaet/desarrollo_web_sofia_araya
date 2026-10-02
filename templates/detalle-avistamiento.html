@@ -10,19 +10,19 @@
 <section id="detalle-avistamiento">
     <dl>
         <dt>Ave:</dt>
-        <dd>{{ avistamiento.ave.nombre }} ({{ avistamiento.ave.tipo }})</dd>
+        <dd>{{ avistamiento.ave.nombre }}</dd>
 
         <dt>Lugar:</dt>
         <dd>{{ avistamiento.lugar }}</dd>
 
         <dt>Fecha:</dt>
-        <dd>{{ avistamiento.fecha }}</dd>
+        <dd>{{ avistamiento.fecha_hora.strftime('%d-%m-%Y') }}</dd>
 
         <dt>Hora:</dt>
-        <dd>{{ avistamiento.hora }}</dd>
+        <dd>{{ avistamiento.fecha_hora.strftime('%H:%M') }}</dd>
 
         <dt>Voluntario:</dt>
-        <dd>{{ avistamiento.voluntario.nombre_completo }}</dd>
+        <dd>{{ avistamiento.voluntario.nombre }}</dd>
     </dl>
 
     <h3>Galería</h3>

@@ -20,7 +20,6 @@
             <thead>
                 <tr>
                     <th>Ave</th>
-                    <th>Tipo</th>
                     <th>Lugar</th>
                     <th>Fecha</th>
                     <th>Hora</th>
@@ -32,11 +31,10 @@
                 {% for av in avistamientos %}
                 <tr>
                     <td>{{ av.ave.nombre }}</td>
-                    <td>{{ av.ave.tipo }}</td>
                     <td>{{ av.lugar }}</td>
-                    <td>{{ av.fecha }}</td>
-                    <td>{{ av.hora }}</td>
-                    <td>{{ av.voluntario.nombre_completo }}</td>
+                    <td>{{ av.fecha_hora.strftime('%d-%m-%Y') }}</td>
+                    <td>{{ av.fecha_hora.strftime('%H:%M') }}</td>
+                    <td>{{ av.voluntario.nombre }}</td>
                     <td><a href="{{ url_for('detalle_avistamiento', id=av.id) }}">Ver</a></td>
                 </tr>
                 {% else %}

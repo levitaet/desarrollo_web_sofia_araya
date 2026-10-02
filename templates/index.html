@@ -18,8 +18,8 @@
         {% for av in avistamientos %}
         <li>
             <strong>{{ av.ave.nombre }}</strong> &mdash;
-            {{ av.lugar }}, {{ av.fecha }} a las {{ av.hora }}
-            (por {{ av.voluntario.nombre_completo }})
+            {{ av.lugar }}, {{ av.fecha_hora.strftime('%d-%m-%Y') }} a las {{ av.fecha_hora.strftime('%H:%M') }}
+            (por {{ av.voluntario.nombre }})
             &mdash; <a href="{{ url_for('detalle_avistamiento', id=av.id) }}">Ver detalle</a>
         </li>
         {% endfor %}
