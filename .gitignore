@@ -1,3 +1,5 @@
 desktop.ini
 venv/
 .env
+__pycache__/
+*.pyc
