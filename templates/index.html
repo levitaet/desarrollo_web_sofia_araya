@@ -7,4 +7,25 @@
 {% endblock %}
 
 {% block content %}
+<section id="bienvenida">
+    <p>Bienvenida a la plataforma de la <strong>Unión de Ornitólogos de Chile</strong>.
+        Registra voluntarios, reporta avistamientos y consulta el listado de aves observadas.</p>
+</section>
+<section id="ultimos-avistamientos">
+    <h3>Últimos avistamientos registrados</h3>
+    {% if avistamientos %}
+    <ul id="lista-ultimos">
+        {% for av in avistamientos %}
+        <li>
+            <strong>{{ av.ave.nombre }}</strong> &mdash;
+            {{ av.lugar }}, {{ av.fecha }} a las {{ av.hora }}
+            (por {{ av.voluntario.nombre_completo }})
+            &mdash; <a href="{{ url_for('detalle_avistamiento', id=av.id) }}">Ver detalle</a>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>Aún no hay avistamientos registrados.</p>
+    {% endif %}
+</section>
 {% endblock %}

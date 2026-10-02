@@ -3,61 +3,72 @@
 {% block title %}Listado de Avistamientos - Avistamientos de Aves 🐦{% endblock %}
 
 {% block css %}
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/listados.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/listados.css') }}">
 {% endblock %}
 
 {% block header_title %}
-    <h2>Listado de Avistamientos</h2>
+<h2>Listado de Avistamientos</h2>
 {% endblock %}
-
 {% block content %}
-        <section id="filtros">
-            <h2>Filtros y Orden</h2>
-            <div style="margin-bottom: 10px;">
-                <label for="filtro-tipo">Tipo de ave:</label>
-                <select id="filtro-tipo">
-                    <option value="">Todos</option>
-                </select>
-            </div>
+<section id="filtros">
+    <h2>Listado de Avistamientos</h2>
+</section>
 
-            <div style="margin-bottom: 20px;">
-                <label for="ordenar-por">Ordenar por:</label>
-                <select id="ordenar-por">
-                    <option value="fecha-desc">Fecha (más reciente primero)</option>
-                    <option value="fecha-asc">Fecha (más antigua primero)</option>
-                    <option value="lugar-asc">Lugar (A-Z)</option>
-                </select>
-            </div>
-        </section>
-        <div id="tabla-y-paginas">
-            <div id="resultados">
-                <table id="tabla-avistamientos" style="width: 100%; text-align: left; border-collapse: collapse;">
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Tipo</th>
-                            <th>Subdivisión</th>
-                            <th>Lugar</th>
-                            <th>Región</th>
-                            <th>Fecha</th>
-                            <th>Hora</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-            </div>
+<div id="tabla-y-paginas">
+    <div id="resultados">
+        <table id="tabla-avistamientos">
+            <thead>
+                <tr>
+                    <th>Ave</th>
+                    <th>Tipo</th>
+                    <th>Lugar</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Voluntario</th>
+                    <th>Detalle</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for av in avistamientos %}
+                <tr>
+                    <td>{{ av.ave.nombre }}</td>
+                    <td>{{ av.ave.tipo }}</td>
+                    <td>{{ av.lugar }}</td>
+                    <td>{{ av.fecha }}</td>
+                    <td>{{ av.hora }}</td>
+                    <td>{{ av.voluntario.nombre_completo }}</td>
+                    <td><a href="{{ url_for('detalle_avistamiento', id=av.id) }}">Ver</a></td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="7">No hay avistamientos registrados aún.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
-            <div id="paginacion" style="margin-top: 20px; text-align: center;">
-                <button type="button" id="btn-anterior">Anterior</button>
-                <span id="info-pagina" style="margin: 0 10px;">Página 1</span>
-                <button type="button" id="btn-siguiente">Siguiente</button>
-            </div>
-        </div>
+    <div id="paginacion">
+        {% if page > 1 %}
+        <a href="{{ url_for('listado_avistamiento', page=page-1) }}" class="boton-enlace">&larr; Anterior</a>
+        {% else %}
+        <span>&larr; Anterior</span>
+        {% endif %}
+
+        <span id="info-pagina">Página {{ page }} de {{ total_pages }}</span>
+
+        {% if page < total_pages %} <a href="{{ url_for('listado_avistamiento', page=page+1) }}" class="boton-enlace">
+            Siguiente &rarr;</a>
+            {% else %}
+            <span>Siguiente &rarr;</span>
+            {% endif %}
+    </div>
+</div>
 {% endblock %}
+
 
 {% block javascript %}
-    <script src="{{ url_for('static', filename='js/data/tipos-aves.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/data/avistamientos.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/controllers/listado.js') }}"></script>
+<script src="{{ url_for('static', filename='js/data/tipos-aves.js') }}"></script>
+<script src="{{ url_for('static', filename='js/data/avistamientos.js') }}"></script>
+<script src="{{ url_for('static', filename='js/controllers/listado.js') }}"></script>
 {% endblock %}

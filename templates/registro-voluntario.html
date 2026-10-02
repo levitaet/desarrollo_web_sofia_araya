@@ -11,15 +11,25 @@
 {% endblock %}
 
 {% block content %}
-<form class="formulario" id="login-form">
+<form class="formulario" id="login-form" method="POST" action="{{ url_for('registro_voluntario') }}">
+
+  {% if errores %}
+  <div class="errores-servidor" role="alert">
+    {% for campo, msg in errores.items() %}
+    <p class="error visible">{{ msg }}</p>
+    {% endfor %}
+  </div>
+  {% endif %}
+
   <div id="mail-input" class="grupo-input">
     <label for="email">Email <span class="asterisco-rojo">*</span>:</label>
-    <input id="email" name="email" type="email">
+    <input id="email" name="email" type="email" value="{{ valores.get('email', '') }}">
     <span class="error" id="error-email">Email inválido.</span>
   </div>
   <div id="nombre-completo-input" class="grupo-input">
     <label for="nombre-completo">Nombre completo <span class="asterisco-rojo">*</span>:</label>
-    <input id="nombre-completo" name="nombre-completo" type="text" minlength="10" maxlength="155">
+    <input id="nombre-completo" name="nombre-completo" type="text" minlength="10" maxlength="155"
+      value="{{ valores.get('nombre_completo', '') }}">
     <span class="error" id="error-nombre">Nombre inválido (entre 10 y 155 caracteres).</span>
   </div>
   <div id="contrasenna-input" class="grupo-input">
@@ -31,6 +41,9 @@
     <label for="regiones">Región <span class="asterisco-rojo">*</span>:</label>
     <select id="regiones" name="regiones">
       <option value="">-- Seleccione región --</option>
+      {% for region in regiones %}
+      <option value="{{ region.id }}">{{ region.nombre }}</option>
+      {% endfor %}
     </select>
     <span class="error" id="error-region">Debes seleccionar una región.</span>
   </div>
@@ -39,11 +52,16 @@
     <label for="comunas">Comuna <span class="asterisco-rojo">*</span>:</label>
     <select id="comunas" name="comunas">
       <option value="">-- Seleccione comuna --</option>
+      {% for comuna in comunas %}
+      <option value="{{ comuna.id }}" {% if valores.get('comuna_id')==comuna.id|string %}selected{% endif %}>
+        {{ comuna.nombre }}
+      </option>
+      {% endfor %}
     </select>
     <span class="error" id="error-comuna">Debes seleccionar una comuna.</span>
   </div>
   <div class="botones">
-    <button type="button" id="envio">
+    <button type="submit" id="envio">
       Regístrate como voluntario
     </button>
   </div>

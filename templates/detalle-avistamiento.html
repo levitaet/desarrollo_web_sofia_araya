@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Avistamiento #{{ avistamiento.id }} - Avistamientos de Aves 🐦{% endblock %}
+
+{% block header_title %}
+<h2>Detalle del Avistamiento</h2>
+{% endblock %}
+
+{% block content %}
+<section id="detalle-avistamiento">
+    <dl>
+        <dt>Ave:</dt>
+        <dd>{{ avistamiento.ave.nombre }} ({{ avistamiento.ave.tipo }})</dd>
+
+        <dt>Lugar:</dt>
+        <dd>{{ avistamiento.lugar }}</dd>
+
+        <dt>Fecha:</dt>
+        <dd>{{ avistamiento.fecha }}</dd>
+
+        <dt>Hora:</dt>
+        <dd>{{ avistamiento.hora }}</dd>
+
+        <dt>Voluntario:</dt>
+        <dd>{{ avistamiento.voluntario.nombre_completo }}</dd>
+    </dl>
+
+    <h3>Galería</h3>
+    <div id="galeria">
+        {% for reg in avistamiento.registros %}
+        {% set ext = reg.ruta_archivo.rsplit('.', 1)[1].lower() %}
+        {% if ext in ['mp4', 'mov', 'avi', 'webm'] %}
+        <video controls width="320">
+            <source src="{{ url_for('static', filename='uploads/' + reg.ruta_archivo) }}" type="video/{{ ext }}">
+            Tu navegador no soporta este formato de video.
+        </video>
+        {% else %}
+        <img src="{{ url_for('static', filename='uploads/' + reg.ruta_archivo) }}" alt="{{ reg.nombre_archivo }}"
+            width="320">
+        {% endif %}
+        {% else %}
+        <p>Este avistamiento no tiene archivos adjuntos.</p>
+        {% endfor %}
+    </div>
+
+    <p><a href="{{ url_for('listado_avistamiento') }}" class="boton-enlace">&larr; Volver al listado</a></p>
+</section>
+{% endblock %}
