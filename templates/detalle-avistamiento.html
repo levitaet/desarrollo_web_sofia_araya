@@ -23,6 +23,11 @@
 
         <dt>Voluntario:</dt>
         <dd>{{ avistamiento.voluntario.nombre }}</dd>
+        
+        {% if avistamiento.descripcion %}
+        <dt>Descripción:</dt>
+        <dd>{{ avistamiento.descripcion }}</dd>
+        {% endif %}
     </dl>
 
     <h3>Galería</h3>

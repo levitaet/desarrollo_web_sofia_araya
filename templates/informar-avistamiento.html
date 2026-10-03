@@ -82,7 +82,13 @@
     </div>
 
     <div>
-        <label for="archivo">Foto o Video <span class="asterisco-rojo">*</span>:</label>
+        <label for="descripcion">Descripción (opcional):</label>
+        <textarea id="descripcion" name="descripcion" rows="4"
+            style="width: 100%; resize: vertical;">{{ valores.get('descripcion', '') }}</textarea>
+    </div>
+
+    <div>
+        <label for="archivos">Foto o Video <span class="asterisco-rojo">*</span>:</label>
         <input type="file" id="archivos" name="archivos" accept="image/*,video/*" multiple>
         <span class="error" id="error-archivo">Debe subir al menos una foto o video.</span>
     </div>
