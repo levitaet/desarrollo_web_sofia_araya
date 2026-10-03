@@ -1,40 +1,40 @@
+document.addEventListener('DOMContentLoaded', () => {
+    let selectRegiones = document.getElementById("regiones");
+    let selectComunas = document.getElementById("comunas");
 
-let selectRegiones = document.getElementById("regiones");
+    const todasLasComunas = Array.from(selectComunas.options);
 
-RegionesYcomunas.regiones.forEach((region) => {
-    let nuevaOpcion = document.createElement("option");
-    nuevaOpcion.value = region.NombreRegion;
-    nuevaOpcion.textContent = region.NombreRegion;
-    selectRegiones.appendChild(nuevaOpcion);
+    function actualizarComunas() {
+        const regionNombre = selectRegiones.options[selectRegiones.selectedIndex].text.trim();
+        selectComunas.innerHTML = '<option value="">-- Seleccione comuna --</option>';
+
+        if (!selectRegiones.value) return;
+
+        const regionData = RegionesYcomunas.regiones.find(r => r.NombreRegion.trim() === regionNombre);
+
+        if (regionData) {
+            for (let i = 1; i < todasLasComunas.length; i++) {
+                const opt = todasLasComunas[i];
+                if (regionData.comunas.includes(opt.text.trim())) {
+                    selectComunas.appendChild(opt.cloneNode(true));
+                }
+            }
+        }
+    }
+
+    selectRegiones.addEventListener("change", actualizarComunas);
+    if (selectRegiones.value) {
+        const comunaPreseleccionada = todasLasComunas.find(opt => opt.selected);
+        actualizarComunas();
+        if (comunaPreseleccionada) {
+            selectComunas.value = comunaPreseleccionada.value;
+        }
+    }
 });
 
-let selectComunas = document.getElementById("comunas");
-
-selectRegiones.addEventListener("change", (evento) => {
-    selectComunas.innerHTML = '<option value="">-- Seleccione comuna --</option>';
-
-    let regionSeleccionada = evento.target.value;
-
-    let datosRegion = RegionesYcomunas.regiones.find(
-        (region) => region.NombreRegion === regionSeleccionada
-    );
-
-    if (datosRegion) {
-        datosRegion.comunas.forEach((comuna) => {
-            let nuevaOpcion = document.createElement("option");
-            nuevaOpcion.value = comuna;
-            nuevaOpcion.textContent = comuna;
-            selectComunas.appendChild(nuevaOpcion);
-        })
-    }
-})
-
-// validacion formulario
 const validarForm = () => {
 
     const mailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
-    // funciones auxiliares
     function validadorMail(mail) {
         return mailRegex.test(mail)
     }
@@ -45,9 +45,8 @@ const validarForm = () => {
         return tieneNumeros(pswd) && !malas.includes(pswd);
     };
 
-    // obtener inputs del DOM por el ID
     let emailInput = document.getElementById("email");
-    let userNameInput = document.getElementById("nombre-completo");
+    let userNameInput = document.getElementById("nombre");
     let pswdInput = document.getElementById("contrasenna");
 
     const error_email = document.getElementById("error-email");
