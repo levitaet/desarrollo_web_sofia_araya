@@ -235,20 +235,39 @@ def informar_avistamiento():
 def listado_avistamiento():
     db = get_db()
     try:
+        aves = db.query(Ave).order_by(Ave.nombre).all()
+        
         page = request.args.get("page", 1, type=int)
+        ave_id = request.args.get("ave_id", "")
+        ordenar = request.args.get("ordenar", "fecha-desc")
+        
         per_page = 5
         offset = (page - 1) * per_page
-        total = db.query(Avistamiento).count()
-        avistamientos = (db.query(Avistamiento)
-                         .order_by(Avistamiento.id.desc())
-                         .offset(offset)
-                         .limit(per_page)
-                         .all())
+        
+        query = db.query(Avistamiento)
+        
+        if ave_id:
+            query = query.filter(Avistamiento.ave_id == int(ave_id))
+            
+        if ordenar == "fecha-asc":
+            query = query.order_by(Avistamiento.fecha_hora.asc())
+        elif ordenar == "lugar-asc":
+            query = query.order_by(Avistamiento.lugar.asc())
+        else:
+            query = query.order_by(Avistamiento.fecha_hora.desc())
+            
+        total = query.count()
+        avistamientos = query.offset(offset).limit(per_page).all()
+        
         total_pages = max(1, (total + per_page - 1) // per_page)
+        
         return render_template("listado-avistamiento.html",
                                avistamientos=avistamientos,
+                               aves=aves,
                                page=page,
-                               total_pages=total_pages)
+                               total_pages=total_pages,
+                               ave_id=ave_id,
+                               ordenar=ordenar)
     finally:
         db.close()
 

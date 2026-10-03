@@ -10,9 +10,26 @@
 <h2>Listado de Avistamientos</h2>
 {% endblock %}
 {% block content %}
-<section id="filtros">
-    <h2>Listado de Avistamientos</h2>
-</section>
+<div id="filtros">
+    <form method="GET" action="{{ url_for('listado_avistamiento') }}" class="filtros-form">
+        <label for="ave_id">Filtro por Ave:</label>
+        <select name="ave_id" id="ave_id">
+            <option value="">-- Todas las aves --</option>
+            {% for ave in aves %}
+            <option value="{{ ave.id }}" {% if ave.id|string == ave_id %}selected{% endif %}>{{ ave.nombre }}</option>
+            {% endfor %}
+        </select>
+        
+        <label for="ordenar">Ordenar por:</label>
+        <select name="ordenar" id="ordenar">
+            <option value="fecha-desc" {% if ordenar == 'fecha-desc' %}selected{% endif %}>Más recientes primero</option>
+            <option value="fecha-asc" {% if ordenar == 'fecha-asc' %}selected{% endif %}>Más antiguos primero</option>
+            <option value="lugar-asc" {% if ordenar == 'lugar-asc' %}selected{% endif %}>Lugar (A - Z)</option>
+        </select>
+        
+        <button type="submit" class="boton-volver">Aplicar</button>
+    </form>
+</div>
 
 <div id="tabla-y-paginas">
     <div id="resultados">
@@ -21,25 +38,24 @@
                 <tr>
                     <th>Ave</th>
                     <th>Lugar</th>
-                    <th>Fecha</th>
-                    <th>Hora</th>
+                    <th>Fecha y Hora</th>
                     <th>Voluntario</th>
-                    <th>Detalle</th>
+                    <th>Descripción</th>
                 </tr>
             </thead>
             <tbody>
                 {% for av in avistamientos %}
                 <tr>
-                    <td>{{ av.ave.nombre }}</td>
+                    <td><a href="{{ url_for('detalle_avistamiento', id=av.id) }}" class="enlace-ave">{{ av.ave.nombre
+                            }}</a></td>
                     <td>{{ av.lugar }}</td>
-                    <td>{{ av.fecha_hora.strftime('%d-%m-%Y') }}</td>
-                    <td>{{ av.fecha_hora.strftime('%H:%M') }}</td>
+                    <td>{{ av.fecha_hora.strftime('%d-%m-%Y %H:%M') }}</td>
                     <td>{{ av.voluntario.nombre }}</td>
-                    <td><a href="{{ url_for('detalle_avistamiento', id=av.id) }}">Ver</a></td>
+                    <td class="col-descripcion">{{ av.descripcion if av.descripcion else '' }}</td>
                 </tr>
                 {% else %}
                 <tr>
-                    <td colspan="7">No hay avistamientos registrados aún.</td>
+                    <td colspan="5">No hay avistamientos registrados aún.</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -48,14 +64,14 @@
 
     <div id="paginacion">
         {% if page > 1 %}
-        <a href="{{ url_for('listado_avistamiento', page=page-1) }}" class="boton-enlace">&larr; Anterior</a>
+        <a href="{{ url_for('listado_avistamiento', page=page-1, ave_id=ave_id, ordenar=ordenar) }}" class="boton-enlace">&larr; Anterior</a>
         {% else %}
         <span>&larr; Anterior</span>
         {% endif %}
 
         <span id="info-pagina">Página {{ page }} de {{ total_pages }}</span>
 
-        {% if page < total_pages %} <a href="{{ url_for('listado_avistamiento', page=page+1) }}" class="boton-enlace">
+        {% if page < total_pages %} <a href="{{ url_for('listado_avistamiento', page=page+1, ave_id=ave_id, ordenar=ordenar) }}" class="boton-enlace">
             Siguiente &rarr;</a>
             {% else %}
             <span>Siguiente &rarr;</span>
@@ -66,7 +82,4 @@
 
 
 {% block javascript %}
-<script src="{{ url_for('static', filename='js/data/tipos-aves.js') }}"></script>
-<script src="{{ url_for('static', filename='js/data/avistamientos.js') }}"></script>
-<script src="{{ url_for('static', filename='js/controllers/listado.js') }}"></script>
 {% endblock %}
