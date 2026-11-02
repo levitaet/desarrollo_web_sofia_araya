@@ -8,7 +8,7 @@ from flask import (Flask, render_template, request,
 from sqlalchemy import text
 
 from db import get_db
-from models import Voluntario, Avistamiento, Registro, Ave, Region, Comuna
+from models import Voluntario, Avistamiento, Registro, Ave, Region, Comuna, Comentario
 
 
 app = Flask(__name__)
@@ -347,6 +347,74 @@ def datos_voluntarios_comuna():
         for fila in filas:
             datos.append([fila["comuna"], fila["total"]])
         return respuesta_json(datos)
+    finally:
+        db.close()
+
+def validar_comentario(nombre, texto):
+    """Valida en el servidor las mismas reglas que valida el cliente.
+    Retorna un diccionario {campo: mensaje}; vacío si todo está bien."""
+    errores = {}
+    if len(nombre) < 3 or len(nombre) > 50:
+        errores["nombre"] = "El nombre es obligatorio y debe tener entre 3 y 50 caracteres."
+    if len(texto) < 5 or len(texto) > 300:
+        errores["texto"] = "El comentario es obligatorio y debe tener entre 5 y 300 caracteres."
+    return errores
+
+
+@app.route('/avistamiento/<int:id>/comentarios', methods=['GET'])
+def listar_comentarios(id):
+    db = get_db()
+    try:
+        avistamiento = db.query(Avistamiento).filter(Avistamiento.id == id).first()
+        if not avistamiento:
+            return respuesta_json({"ok": False, "errores": {"general": "El avistamiento no existe."}}, 404)
+
+        comentarios = (db.query(Comentario)
+                       .filter(Comentario.avistamiento_id == id)
+                       .order_by(Comentario.fecha.desc(), Comentario.id.desc())
+                       .all())
+        datos = []
+        for c in comentarios:
+            datos.append({
+                "fecha": c.fecha.strftime("%d-%m-%Y %H:%M"),
+                "nombre": c.nombre,
+                "texto": c.texto,
+            })
+        return respuesta_json(datos)
+    finally:
+        db.close()
+
+
+@app.route('/avistamiento/<int:id>/comentarios', methods=['POST'])
+def agregar_comentario(id):
+    db = get_db()
+    try:
+        avistamiento = db.query(Avistamiento).filter(Avistamiento.id == id).first()
+        if not avistamiento:
+            return respuesta_json({"ok": False, "errores": {"general": "El avistamiento no existe."}}, 404)
+
+        nombre = request.form.get("nombre", "").strip()
+        texto = request.form.get("texto", "").strip()
+
+        errores = validar_comentario(nombre, texto)
+        if errores:
+            return respuesta_json({"ok": False, "errores": errores}, 400)
+
+        nuevo = Comentario(
+            nombre=nombre,
+            texto=texto,
+            fecha=datetime.now(),
+            avistamiento_id=id,
+        )
+        try:
+            db.add(nuevo)
+            db.commit()
+        except Exception as e:
+            app.logger.error("Error con base de datos: {0} ".format(str(e)))
+            db.rollback()
+            return respuesta_json({"ok": False, "errores": {"general": "No se pudo guardar el comentario."}}, 500)
+
+        return respuesta_json({"ok": True}, 201)
     finally:
         db.close()
 
