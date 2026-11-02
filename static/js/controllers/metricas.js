@@ -1,49 +1,108 @@
-const dibujarGrafico = (datos, canvasId, tipo, titulo, colores) => {
-    const ctx = document.getElementById(canvasId).getContext('2d');
+const mostrarMensajeGrafico = (idContenedor, mensaje) => {
+    const contenedor = document.getElementById(idContenedor);
+    contenedor.textContent = "";
+    const p = document.createElement("p");
+    p.className = "mensaje-grafico";
+    p.appendChild(document.createTextNode(mensaje));
+    contenedor.appendChild(p);
+};
 
-    const etiquetas = datos.map(d => d.etiqueta);
-    const valores = datos.map(d => d.valor);
-
-    new Chart(ctx, {
-        type: tipo,
-        data: {
-            labels: etiquetas,
-            datasets: [{
-                label: titulo,
-                data: valores,
-                backgroundColor: colores,
-                borderColor: colores.map(color => color.replace("0.6", "1")),
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: tipo === 'bar' ? {
-                y: {
-                    beginAtZero: true
-                }
-            } : {}
+const pedirDatos = (url, idContenedor, dibujar) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", url, true);
+    xhr.timeout = 5000; // 5 segundos
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            const datos = JSON.parse(xhr.responseText);
+            if (datos.length === 0) {
+                mostrarMensajeGrafico(idContenedor, "Aún no hay datos para este gráfico.");
+            } else {
+                dibujar(datos);
+            }
+        } else {
+            mostrarMensajeGrafico(idContenedor, "No se pudieron cargar los datos (error " + xhr.status + ").");
         }
+    };
+    xhr.onerror = function () {
+        mostrarMensajeGrafico(idContenedor, "No se pudo conectar con el servidor.");
+    };
+    xhr.ontimeout = function () {
+        mostrarMensajeGrafico(idContenedor, "El servidor tardó demasiado en responder.");
+    };
+    xhr.send();
+};
+
+const dibujarPorDia = (datos) => {
+    Highcharts.chart("grafico-dia", {
+        chart: { type: "line" },
+        title: { text: null },
+        xAxis: { type: "category", title: { text: "Día" } },
+        yAxis: { title: { text: "Cantidad de avistamientos" }, allowDecimals: false, min: 0 },
+        legend: { enabled: false },
+        series: [{ name: "Avistamientos", data: datos }]
     });
 };
 
-document.addEventListener("DOMContentLoaded", () => {
-    const estilosBody = getComputedStyle(document.body);
-    Chart.defaults.font.family = estilosBody.fontFamily;
-    Chart.defaults.font.weight = "700";
-    Chart.defaults.font.size = "20"
-    Chart.defaults.color = estilosBody.color;
+const dibujarPorAve = (datos) => {
+    Highcharts.chart("grafico-ave", {
+        chart: { type: "pie" },
+        title: { text: null },
+        tooltip: { pointFormat: "{series.name}: <b>{point.y}</b> ({point.percentage:.1f}%)" },
+        series: [{ name: "Avistamientos", data: datos }]
+    });
+};
 
-    const coloresVoluntarios = metricasVoluntarios.map(() => 'rgba(54, 162, 235, 0.6)');
-    dibujarGrafico(metricasVoluntarios, "grafico-voluntarios", "bar", "Voluntarios Registrados", coloresVoluntarios);
+const dibujarPorComuna = (datos) => {
+    Highcharts.chart("grafico-comuna", {
+        chart: { type: "column" },
+        title: { text: null },
+        xAxis: { type: "category", title: { text: "Comuna" } },
+        yAxis: { title: { text: "Cantidad de voluntarios" }, allowDecimals: false, min: 0 },
+        legend: { enabled: false },
+        series: [{ name: "Voluntarios", data: datos }]
+    });
+};
 
-    const coloresAvistamientos = [
-        'rgba(255, 99, 132, 0.6)',
-        'rgba(255, 159, 64, 0.6)',
-        'rgba(255, 205, 86, 0.6)',
-        'rgba(75, 192, 192, 0.6)',
-        'rgba(153, 102, 255, 0.6)'
-    ];
-    dibujarGrafico(metricasAvistamientos, "grafico-avistamientos", "pie", "Cantidad de Avistamientos", coloresAvistamientos);
+const aplicarTema = () => {
+    const estilos = getComputedStyle(document.body);
+    const colorTexto = estilos.color;
+    const colorLineas = "rgba(237, 241, 214, 0.25)";
+    Highcharts.setOptions({
+        colors: ["#f2c14e", "#9dc08b", "#f78154", "#5fb3b3", "#e9d8a6",
+                 "#b388eb", "#4d9de0", "#e86a92", "#c2e812", "#ff9f1c"],
+        chart: { backgroundColor: "transparent", style: { fontFamily: estilos.fontFamily } },
+        xAxis: {
+            lineColor: colorLineas,
+            tickColor: colorLineas,
+            labels: { style: { color: colorTexto, fontSize: "13px" } },
+            title: { style: { color: colorTexto } }
+        },
+        yAxis: {
+            gridLineColor: colorLineas,
+            labels: { style: { color: colorTexto, fontSize: "13px" } },
+            title: { style: { color: colorTexto } }
+        },
+        tooltip: { backgroundColor: "rgba(0, 0, 0, 0.85)", style: { color: colorTexto } },
+        plotOptions: {
+            pie: {
+                borderColor: "rgb(64, 81, 59)",
+                dataLabels: { color: colorTexto, style: { textOutline: "none", fontSize: "13px" } }
+            },
+            column: { borderWidth: 0 }
+        },
+        credits: { style: { color: "rgba(237, 241, 214, 0.6)" } }
+    });
+};
 
+window.addEventListener("DOMContentLoaded", function () {
+    if (typeof Highcharts === "undefined") {
+        ["grafico-dia", "grafico-ave", "grafico-comuna"].forEach((id) => {
+            mostrarMensajeGrafico(id, "No se pudo cargar la biblioteca de gráficos (Highcharts).");
+        });
+        return;
+    }
+    aplicarTema();
+    pedirDatos("/datos-avistamientos-dia", "grafico-dia", dibujarPorDia);
+    pedirDatos("/datos-avistamientos-ave", "grafico-ave", dibujarPorAve);
+    pedirDatos("/datos-voluntarios-comuna", "grafico-comuna", dibujarPorComuna);
 });

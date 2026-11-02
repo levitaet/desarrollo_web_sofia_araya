@@ -3,31 +3,35 @@
 {% block title %}Estadísticas para nerds - Avistamientos de Aves 🐦{% endblock %}
 
 {% block css %}
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/metricas.css') }}">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/metricas.css') }}">
 {% endblock %}
 
 {% block header_title %}
-    <h2>Estadísticas para nerds</h2>
+<h2>Estadísticas para nerds</h2>
 {% endblock %}
 
 {% block content %}
-        <section>
-            <h2>Voluntarios Registrados por Región</h2>
-            <div class="contenedor-grafico">
-                <canvas id="grafico-voluntarios"></canvas>
-            </div>
-        </section>
+<section class="tarjeta-grafico ancho-completo">
+    <h3>Avistamientos por día</h3>
+    <div id="grafico-dia" class="contenedor-grafico"></div>
+</section>
 
-        <section>
-            <h2>Avistamientos por Tipo de Ave</h2>
-            <div class="contenedor-grafico">
-                <canvas id="grafico-avistamientos"></canvas>
-            </div>
-        </section>
+<section class="tarjeta-grafico">
+    <h3>Avistamientos por tipo de ave</h3>
+    <div id="grafico-ave" class="contenedor-grafico"></div>
+</section>
+
+<section class="tarjeta-grafico">
+    <h3>Voluntarios por comuna</h3>
+    <div id="grafico-comuna" class="contenedor-grafico"></div>
+</section>
+
+<p class="volver-portada">
+    <a href="{{ url_for('index') }}" class="boton-enlace">&larr; Volver a la portada</a>
+</p>
 {% endblock %}
 
 {% block javascript %}
-    <script src="{{ url_for('static', filename='js/data/metricas-data.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/controllers/metricas.js') }}"></script>
+<script src="https://code.highcharts.com/12.6.2/highcharts.js"></script>
+<script src="{{ url_for('static', filename='js/controllers/metricas.js') }}"></script>
 {% endblock %}
