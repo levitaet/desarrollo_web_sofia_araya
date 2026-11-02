@@ -56,6 +56,23 @@
         <h3>Comentarios</h3>
         <p id="estado-comentarios" class="estado-comentarios">Cargando comentarios...</p>
         <ul id="lista-comentarios" class="lista-comentarios"></ul>
+
+        <h4>Agregar comentario</h4>
+        <form id="form-comentario" class="form-comentario" method="post"
+            action="{{ url_for('agregar_comentario', id=avistamiento.id) }}">
+            <div class="campo-comentario">
+                <label for="comentario-nombre">Nombre <span class="asterisco-rojo">*</span>:</label>
+                <input type="text" id="comentario-nombre" name="nombre">
+                <span class="error" id="error-comentario-nombre">El nombre es obligatorio y debe tener entre 3 y 50 caracteres.</span>
+            </div>
+            <div class="campo-comentario">
+                <label for="comentario-texto">Comentario <span class="asterisco-rojo">*</span>:</label>
+                <textarea id="comentario-texto" name="texto" rows="3" cols="40"></textarea>
+                <span class="error" id="error-comentario-texto">El comentario es obligatorio y debe tener entre 5 y 300 caracteres.</span>
+            </div>
+            <p id="mensaje-comentario" class="mensaje-comentario"></p>
+            <button type="submit" id="btn-comentario">Agregar comentario</button>
+        </form>
     </section>
 
     <p><a href="{{ url_for('listado_avistamiento') }}" class="boton-enlace">&larr; Volver al listado</a></p>
