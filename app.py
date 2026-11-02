@@ -2,6 +2,7 @@ import os
 import re
 import json
 from datetime import datetime
+from dotenv import load_dotenv
 from werkzeug.utils import secure_filename
 from flask import (Flask, render_template, request,
                    redirect, url_for, flash, abort, make_response)
@@ -11,8 +12,12 @@ from db import get_db
 from models import Voluntario, Avistamiento, Registro, Ave, Region, Comuna, Comentario
 
 
+load_dotenv()
+
 app = Flask(__name__)
-app.secret_key = "miau"
+app.secret_key = os.getenv("SECRET_KEY")
+if not app.secret_key:
+    raise RuntimeError("Falta SECRET_KEY en el archivo .env (ver .env.example)")
 
 UPLOAD_FOLDER = os.path.join("static", "uploads")
 ALLOWED_EXT = {"png", "jpg", "jpeg", "gif", "mp4", "mov", "avi", "webm"}
@@ -437,4 +442,4 @@ def agregar_comentario(id):
         db.close()
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=os.getenv("FLASK_DEBUG", "0") == "1")
