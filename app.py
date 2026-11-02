@@ -1,9 +1,11 @@
 import os
 import re
+import json
 from datetime import datetime
 from werkzeug.utils import secure_filename
 from flask import (Flask, render_template, request,
-                   redirect, url_for, flash, abort, jsonify)
+                   redirect, url_for, flash, abort, make_response)
+from sqlalchemy import text
 
 from db import get_db
 from models import Voluntario, Avistamiento, Registro, Ave, Region, Comuna
@@ -18,6 +20,12 @@ app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
 def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXT
+
+def respuesta_json(datos, status=200):
+    resp = make_response(json.dumps(datos), status)
+    resp.headers["Content-type"] = "application/json;charset=UTF-8"
+    resp.headers["Cache-Control"] = "no-cache"
+    return resp
 
 @app.route('/')
 def index():
@@ -286,6 +294,61 @@ def detalle_avistamiento(id):
 def metricas():
     return render_template('metricas.html')
 
+@app.route('/datos-avistamientos-dia', methods=['GET'])
+def datos_avistamientos_dia():
+    db = get_db()
+    try:
+        sql = text("""
+            SELECT DATE(fecha_hora) AS dia, COUNT(*) AS total
+            FROM avistamiento
+            GROUP BY DATE(fecha_hora)
+            ORDER BY dia ASC
+        """)
+        filas = db.execute(sql).mappings().all()
+        datos = []
+        for fila in filas:
+            datos.append([fila["dia"].strftime("%d-%m-%Y"), fila["total"]])
+        return respuesta_json(datos)
+    finally:
+        db.close()
+
+@app.route('/datos-avistamientos-ave', methods=['GET'])
+def datos_avistamientos_ave():
+    db = get_db()
+    try:
+        sql = text("""
+            SELECT ave.nombre AS ave, COUNT(avistamiento.id) AS total
+            FROM avistamiento
+            JOIN ave ON avistamiento.ave_id = ave.id
+            GROUP BY ave.id, ave.nombre
+            ORDER BY total DESC, ave.nombre ASC
+        """)
+        filas = db.execute(sql).mappings().all()
+        datos = []
+        for fila in filas:
+            datos.append([fila["ave"], fila["total"]])
+        return respuesta_json(datos)
+    finally:
+        db.close()
+
+@app.route('/datos-voluntarios-comuna', methods=['GET'])
+def datos_voluntarios_comuna():
+    db = get_db()
+    try:
+        sql = text("""
+            SELECT comuna.nombre AS comuna, COUNT(voluntario.id) AS total
+            FROM voluntario
+            JOIN comuna ON voluntario.comuna_id = comuna.id
+            GROUP BY comuna.id, comuna.nombre
+            ORDER BY total DESC, comuna.nombre ASC
+        """)
+        filas = db.execute(sql).mappings().all()
+        datos = []
+        for fila in filas:
+            datos.append([fila["comuna"], fila["total"]])
+        return respuesta_json(datos)
+    finally:
+        db.close()
 
 if __name__ == '__main__':
     app.run(debug=True)
