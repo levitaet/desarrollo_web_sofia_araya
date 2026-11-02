@@ -21,6 +21,17 @@ app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXT
 
+def a_entero(valor):
+    """Convierte un texto a entero positivo. Retorna None si no es válido
+    ("abc", "", "-3", "1.5"...)"""
+    try:
+        numero = int(valor)
+    except (TypeError, ValueError):
+        return None
+    if numero <= 0:
+        return None
+    return numero
+
 def respuesta_json(datos, status=200):
     resp = make_response(json.dumps(datos), status)
     resp.headers["Content-type"] = "application/json;charset=UTF-8"
@@ -70,26 +81,24 @@ def registro_voluntario():
         errores = {}
         mail_regex = r'^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$'
 
-        if not re.match(mail_regex, email):
+        if not re.match(mail_regex, email) or len(email) > 80:
             errores["email"] = "Email inválido."
 
         if not nombre or len(nombre) < 10 or len(nombre) > 255:
             errores["nombre"] = "Nombre inválido (entre 10 y 255 caracteres)."
 
-        if not contrasenna or not re.search(r'\d', contrasenna) or contrasenna == "1234":
+        if not contrasenna or not re.search(r'\d', contrasenna) or contrasenna == "1234" or len(contrasenna) > 255:
             errores["contrasenna"] = "Contraseña inválida (debe contener números y no ser '1234')."
 
         telefono_regex = r'^\+?[0-9\s\-]{7,15}$'
         if not telefono or not re.match(telefono_regex, telefono):
             errores["telefono"] = "Teléfono inválido (solo números, entre 7 y 15 dígitos)."
         
-        if not comuna_id:
-            errores["comuna"] = "Debes seleccionar una comuna"
-        
-        else:
-            #verificar id de comuna en la bdd
-            if not db.query(Comuna).filter(Comuna.id == int(comuna_id)).first():
-                errores["comuna"] = "Comuna no válida."
+        comuna_id_int = a_entero(comuna_id)
+        if comuna_id_int is None:
+            errores["comuna"] = "Debes seleccionar una comuna."
+        elif not db.query(Comuna).filter(Comuna.id == comuna_id_int).first():
+            errores["comuna"] = "Comuna no válida."
         
             #verificar email duplicado
         if "email" not in errores:
@@ -107,7 +116,7 @@ def registro_voluntario():
             email=email,
             contrasenna=contrasenna,
             telefono=telefono,
-            comuna_id=int(comuna_id),
+            comuna_id=comuna_id_int,
             fecha_registro=datetime.now(),
         )
 
@@ -163,14 +172,16 @@ def informar_avistamiento():
 
         errores = {}
 
-        if not voluntario_id:
-            errores["voluntario"] = "Debes seleccionar un voluntario."
+        voluntario_id_int = a_entero(voluntario_id)
+        if voluntario_id_int is None or not db.query(Voluntario).filter(Voluntario.id == voluntario_id_int).first():
+            errores["voluntario"] = "Debes seleccionar un voluntario válido."
 
-        if not ave_id:
-            errores["ave"] = "Debes seleccionar un ave."
+        ave_id_int = a_entero(ave_id)
+        if ave_id_int is None or not db.query(Ave).filter(Ave.id == ave_id_int).first():
+            errores["ave"] = "Debes seleccionar un ave válida."
 
-        if not lugar:
-            errores["lugar"] = "Debes ingresar el lugar de avistamiento."
+        if not lugar or len(lugar) > 200:
+            errores["lugar"] = "Debes ingresar el lugar de avistamiento (máximo 200 caracteres)."
 
         fecha_hora_dt = None
         fecha_regex = r'^\d{2}-\d{2}-\d{4}$'
@@ -212,7 +223,7 @@ def informar_avistamiento():
             fecha_hora=fecha_hora_dt,
             lugar=lugar,
             descripcion=descripcion if descripcion else None,
-            ave_id=int(ave_id),
+            ave_id=ave_id_int,
             voluntario_id=int(voluntario_id),
         )
         db.add(nuevo_av)
@@ -243,10 +254,15 @@ def listado_avistamiento():
     db = get_db()
     try:
         aves = db.query(Ave).order_by(Ave.nombre).all()
-        
+
         page = request.args.get("page", 1, type=int)
-        ave_id = request.args.get("ave_id", "")
+        if page < 1:
+            page = 1
+        ave_id_int = a_entero(request.args.get("ave_id", ""))
+        ave_id = str(ave_id_int) if ave_id_int else ""
         ordenar = request.args.get("ordenar", "fecha-desc")
+        if ordenar not in ("fecha-desc", "fecha-asc", "lugar-asc"):
+            ordenar = "fecha-desc"
         
         per_page = 5
         offset = (page - 1) * per_page
@@ -264,10 +280,12 @@ def listado_avistamiento():
             query = query.order_by(Avistamiento.fecha_hora.desc())
             
         total = query.count()
-        avistamientos = query.offset(offset).limit(per_page).all()
-        
         total_pages = max(1, (total + per_page - 1) // per_page)
-        
+        if page > total_pages:
+            page = total_pages
+            offset = (page - 1) * per_page
+        avistamientos = query.offset(offset).limit(per_page).all()
+
         return render_template("listado-avistamiento.html",
                                avistamientos=avistamientos,
                                aves=aves,
