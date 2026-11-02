@@ -162,3 +162,21 @@ footer {
 #bienvenida {
   text-align: center;
 }
+
+@media (max-width: 700px) {
+  .main-header {
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .menu-botones {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 5px;
+  }
+
+  .boton-enlace {
+    padding: 8px 10px;
+  }
+}
