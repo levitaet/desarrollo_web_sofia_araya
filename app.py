@@ -133,13 +133,12 @@ def informar_avistamiento():
                                    regiones=regiones,
                                    voluntario_id_pre=voluntario_id_pre,
                                    errores={}, valores={})
-        
-        #POST
+
         voluntario_id = request.form.get("voluntario_id", "").strip()
         ave_id        = request.form.get("ave_id", "").strip()
         lugar         = request.form.get("lugar", "").strip()
-        fecha         = request.form.get("fecha", "").strip()   # DD-MM-AAAA
-        hora          = request.form.get("hora", "").strip()    # HH:MM
+        fecha         = request.form.get("fecha", "").strip()
+        hora          = request.form.get("hora", "").strip()
         descripcion   = request.form.get("descripcion", "").strip()
         archivos      = request.files.getlist("archivos")
 
