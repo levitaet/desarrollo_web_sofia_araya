@@ -10,7 +10,7 @@ const mostrarMensajeGrafico = (idContenedor, mensaje) => {
 const pedirDatos = (url, idContenedor, dibujar) => {
     const xhr = new XMLHttpRequest();
     xhr.open("GET", url, true);
-    xhr.timeout = 5000; // 5 segundos
+    xhr.timeout = 5000;
     xhr.onload = function () {
         if (xhr.status === 200) {
             const datos = JSON.parse(xhr.responseText);
