@@ -1,7 +1,16 @@
+# maven/spring boot
+target/
+HELP.md
+.mvn/wrapper/maven-wrapper.jar
+
+src/main/resources/application.properties
+
 desktop.ini
 venv/
 .env
 __pycache__/
 *.pyc
+
+# IDEs
 .vscode/
 .idea/
