@@ -2,6 +2,8 @@ package cl.uchile.avistamientos;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -47,6 +49,31 @@ public class BuscadorController {
             ));
         }
         return resultados;
+    }
+
+    @PostMapping("/api/avistamientos/{id}/notas")
+    ResultadoNota agregarNota(@PathVariable Integer id, @RequestParam(defaultValue = "") String nota) {
+        int valor = validarNota(nota);
+
+        Avistamiento avistamiento = avistamientoRepository.findById(id)
+                .orElseThrow(() -> new AvistamientoNoEncontradoException(id));
+
+        notaRepository.save(new Nota(avistamiento, valor));
+
+        return new ResultadoNota(id, redondear(notaRepository.promedioDe(id)));
+    }
+
+    private int validarNota(String nota) {
+        int valor;
+        try {
+            valor = Integer.parseInt(nota.trim());
+        } catch (NumberFormatException e) {
+            throw new NotaInvalidaException();
+        }
+        if (valor < 1 || valor > 7) {
+            throw new NotaInvalidaException();
+        }
+        return valor;
     }
 
     private Double redondear(Double promedio) {
