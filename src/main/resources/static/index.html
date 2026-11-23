@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscador de Avistamientos - Avistamientos de Aves</title>
+    <link href="css/styles.css" rel="stylesheet">
+    <link href="css/buscador.css" rel="stylesheet">
+</head>
+
+<body>
+<header class="main-header">
+    <a href="/" title="Inicio" class="nav-logo-link">
+        <img src="uploads/ave.svg" alt="Logo de Ave (Inicio)" class="logo-ave">
+        <span class="logo-text">Inicio</span>
+    </a>
+
+    <nav class="menu-botones">
+        <a href="/" class="boton-enlace">Buscador de Avistamientos</a>
+    </nav>
+</header>
+
+<div class="page-title-container">
+    <h1>Unión de Ornitólogos de Chile</h1>
+    <h2>Buscador de Avistamientos</h2>
+</div>
+
+<main>
+    <div id="buscador" class="panel">
+        <form id="form-buscador" class="buscador-form">
+            <label for="texto-busqueda">Buscar por nombre de ave, voluntario o comuna:</label>
+            <input type="search" id="texto-busqueda" name="q" maxlength="80"
+                   autocomplete="off" placeholder="Ej: chincol, María, Ñuñoa">
+        </form>
+
+        <p id="estado-busqueda" class="estado" aria-live="polite">Escribe para comenzar a buscar.</p>
+
+        <div class="tabla-contenedor">
+            <table id="tabla-resultados" hidden>
+                <thead>
+                <tr>
+                    <th>Voluntario</th>
+                    <th>Día</th>
+                    <th>Ave</th>
+                    <th>Comuna</th>
+                    <th>Nota</th>
+                    <th>Evaluar</th>
+                </tr>
+                </thead>
+                <tbody id="cuerpo-resultados">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<footer>🐦</footer>
+
+<script src="js/buscador.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,147 @@
+/* Estilos de la página del buscador (Tarea 4) */
+
+main {
+    padding: 0 20px 90px; /* espacio para el footer fijo */
+}
+
+.panel {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 30px;
+    border-radius: 15px;
+    box-sizing: border-box;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.buscador-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.buscador-form input {
+    font-family: inherit;
+    font-size: 1.1em;
+    padding: 10px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.95);
+    color: #1b1b1b;
+}
+
+.estado {
+    margin: 15px 0;
+    text-align: center;
+}
+
+.tabla-contenedor {
+    width: 100%;
+    overflow-x: auto;
+}
+
+#tabla-resultados {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#tabla-resultados th,
+#tabla-resultados td {
+    padding: 8px;
+    border: 1px solid white;
+    text-align: left;
+    vertical-align: middle;
+}
+
+/* texto que calza con lo buscado */
+mark {
+    background-color: rgb(255, 214, 102);
+    color: #1b1b1b;
+    border-radius: 3px;
+    padding: 0 2px;
+}
+
+.celda-nota {
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.boton-evaluar,
+.form-evaluar button,
+.form-evaluar select {
+    font-family: inherit;
+    font-size: 0.95em;
+    padding: 5px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.boton-evaluar,
+.form-evaluar button {
+    border: 1px solid rgb(157, 192, 139);
+    background-color: rgba(157, 192, 139, 0.25);
+    color: rgb(237, 241, 214);
+}
+
+.boton-evaluar:hover,
+.form-evaluar button:hover {
+    background-color: rgba(157, 192, 139, 0.5);
+}
+
+.form-evaluar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+}
+
+.mensaje-evaluar {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.9em;
+}
+
+.mensaje-evaluar.exito {
+    color: rgb(170, 230, 150);
+}
+
+.mensaje-evaluar.error-evaluar {
+    color: #ffb4ab;
+}
+
+/* Pantallas chicas: cada fila de la tabla se muestra como una "tarjeta" */
+@media (max-width: 700px) {
+    main {
+        padding: 0 10px 90px;
+    }
+
+    .panel {
+        padding: 15px;
+    }
+
+    #tabla-resultados thead {
+        display: none;
+    }
+
+    #tabla-resultados tr,
+    #tabla-resultados td {
+        display: block;
+    }
+
+    #tabla-resultados tr {
+        margin-bottom: 12px;
+        border: 1px solid white;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    #tabla-resultados td {
+        border: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    /* el nombre de la columna se toma del atributo data-etiqueta */
+    #tabla-resultados td::before {
+        content: attr(data-etiqueta) ": ";
+        font-weight: bold;
+    }
+}
